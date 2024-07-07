@@ -5,7 +5,7 @@
 
 name: DotNetApp-CICD-Test
 trigger:
- -master
+ - Master
 pool:
  -vmImage: 'ubantu-latest'
 steps:
@@ -32,7 +32,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: '**/*CustomerApi.csproj'
-    arguments: 'configurations$(buildConfigurations) --no-restore'
+    arguments: 'configuration $(buildConfiguration) --no-restore'
     zipAfterPublish: true
 
 
