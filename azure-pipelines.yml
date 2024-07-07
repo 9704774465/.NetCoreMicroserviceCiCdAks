@@ -1,0 +1,38 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+name: DotNetApp-CICD-Test
+trigger:
+ -master
+pool:
+ -vmImage: 'ubantu-latest'
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+  displayName: 'Restore'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--no-restore'
+  displayName: 'build'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*test.csproj'
+    arguments: '--no-restore'
+  displayName: "Test"
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/*CustomerApi.csproj'
+    arguments: 'configurations$(buildConfigurations) --no-restore'
+    zipAfterPublish: true
+
+
