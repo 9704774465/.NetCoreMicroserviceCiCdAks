@@ -3,42 +3,44 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: Dot_NET_CICD_PIP
+name : sample_azure_CICD_pipelines
 
-trigger:
-  - master
+trigger :
+  - master 
 
-variables: 
-  buildConfiguration : 'release'
+variables :
+  -buildConfigurations: 'release'
 
-pool:
-  vmImage : 'ubuntu-latest'
-steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
-    feedsToUse: 'select'
-  displayName: 'Restore-Nudget-Packages'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--no-restore'
-  displayName: 'build Projects'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*Test.csproj'
-    arguments: '--no-restore'
-  displayName: 'run-tests'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/customerApi.csproj'
-    arguments: '--configurations$(buildConfigurations)--no-restore'
-    zipAfterPublish: true
-  displayName: 'publish customerApi'
+pool :
+ -vmImage : 'Ubantu-Latest'
+
+steps :
+  - task : DotNetCoreCLI@2
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'
+      feedsToUse: 'select'
+    displayName: 'Restore'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
+      arguments: '--no-restore'
+    displayName: 'build-job'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: '**/*Test.csproj'
+      arguments: '--no-restore'
+    displayName: 'Test'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      arguments: '--configurations$(buildConfigurations)-no-restore'
+      zipAfterPublish: true
+    displayName: 'Publish'
+  
+  
 
 
